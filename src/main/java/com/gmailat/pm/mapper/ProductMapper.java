@@ -24,7 +24,7 @@ public class ProductMapper implements RowMapper<Product> {
     public List<Product> mapToListProduct(ResultSet resultSet) throws SQLException {
         List<Product> listOfProducts = new ArrayList<Product>();
 
-        while(resultSet.next()) {
+        while (resultSet.next()) {
             int id = resultSet.getInt(1);
             String name = resultSet.getString(2);
             String category = resultSet.getString(3);

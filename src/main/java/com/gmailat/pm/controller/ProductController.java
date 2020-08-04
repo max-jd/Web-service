@@ -23,7 +23,7 @@ public class ProductController {
     public String getList() throws SQLException {
         List<Product> allProducts = productService.getAll();
 
-       return new JSONSerializer().transform(
+        return new JSONSerializer().transform(
                 new DateTransformer("MM/dd/yyyy HH:mm:ss"), java.util.Date.class)
                 .exclude("*.class", "description")
                 .serialize(allProducts);

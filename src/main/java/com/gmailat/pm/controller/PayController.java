@@ -1,6 +1,6 @@
 package com.gmailat.pm.controller;
 
-import com.gmailat.pm.Exception.NotEnoughMoneyExceptionx;
+import com.gmailat.pm.Exception.NotEnoughMoneyException;
 import com.gmailat.pm.entity.Client;
 import com.gmailat.pm.entity.Product;
 import com.gmailat.pm.service.ClientService;
@@ -28,34 +28,38 @@ public class PayController {
     @Autowired
     PayService payService;
 
+    private int amountProductsFroDiscount = 3;
+
     @GetMapping("/pay/{whoId}/{productsIds}")
     public String payFor(@PathVariable("whoId") int whoId,
                          @PathVariable("productsIds") List<Integer> productsIds) throws SQLException {
 
         Client searchedClient = clientService.getById(whoId);
         List<Product> allProducts = productService.getAll();
-        List<Product> filteredById = payService.getProductsByIds(allProducts, productsIds);
+        List<Product> productsFilteredById = payService.getProductsByIds(allProducts, productsIds);
 
-        if(payService.moreThenXdiscounts(3, filteredById)) {
-            payService.sortByBestDiscounts(filteredById);
-            ListIterator<Product> listIterator = filteredById.listIterator(filteredById.size());
-            for(int i = 0; i < 3; i++) {
+        if (payService.moreThenXdiscounts(amountProductsFroDiscount, productsFilteredById)) {
+            payService.sortByBestDiscounts(productsFilteredById);
+            //start from the end of list
+            ListIterator<Product> listIterator = productsFilteredById.listIterator(productsFilteredById.size());
+            for (int i = 0; i < amountProductsFroDiscount; i++) {
                 Product productGreatDeal = listIterator.previous();
+                //set a discounted price
                 productGreatDeal.setPrice(productGreatDeal.getPrice() - productGreatDeal.getDiscountBenefit());
             }
-            while(listIterator.hasPrevious()) {
+            while (listIterator.hasPrevious()) {
                 Product productRegularPrice = listIterator.previous();
                 productRegularPrice.setDiscount(0);
             }
         }
 
-        float sumProducts = payService.sum(filteredById);
-        if(searchedClient.getCash() < sumProducts) {
-            throw new NotEnoughMoneyExceptionx();
-            }else {
-                searchedClient.setCash(searchedClient.getCash()-sumProducts);
-                clientService.update(searchedClient);
-            }
+        float sumProducts = payService.sum(productsFilteredById);
+        if (searchedClient.getCash() < sumProducts) {
+            throw new NotEnoughMoneyException();
+        } else {
+            searchedClient.setCash(searchedClient.getCash() - sumProducts);
+            clientService.update(searchedClient);
+        }
 
         return new JSONSerializer().transform(
                 new DateTransformer("MM/dd/yyyy HH:mm:ss"), java.util.Date.class)

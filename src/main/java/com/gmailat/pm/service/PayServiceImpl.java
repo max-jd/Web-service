@@ -22,7 +22,7 @@ public class PayServiceImpl implements PayService{
     }
 
     public boolean moreThenXdiscounts(int amountDiscount, List<Product> productsList) {
-        return productsList.parallelStream().filter( product -> product.getDiscount() > 0).count() > amountDiscount;
+        return productsList.parallelStream().filter(product -> product.getDiscount() > 0).count() > amountDiscount;
     }
 
     public void sortByBestDiscounts(List<Product> productList) {

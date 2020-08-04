@@ -21,7 +21,7 @@ public class DiscountMapper implements RowMapper<Discount> {
     public List<Discount> mapToListDiscount(ResultSet resultSet) throws SQLException {
         List<Discount> listOfDiscounts = new ArrayList<Discount>();
 
-        while(resultSet.next()) {
+        while (resultSet.next()) {
             int id = resultSet.getInt(1);
             int percent = resultSet.getInt(2);
 

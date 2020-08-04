@@ -1,66 +1,102 @@
 package com.gmailat.pm.dao;
 
 import com.gmailat.pm.entity.Client;
-import com.gmailat.pm.mapper.ClientMapper;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import javax.persistence.Query;
+import javax.persistence.criteria.*;
+import java.sql.SQLException;
 import java.util.List;
 
 @Repository
 public class ClientDaoImpl implements ClientDao {
 
     @Autowired
-    Connection connection;
+    private SessionFactory sessionFactory;
+
 
     @Override
     public List<Client> getAll() throws SQLException {
-        String sql = "SELECT * FROM clients;";
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
 
-        return new ClientMapper().mapToListClient(resultSet);
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Client> criteriaQuery = criteriaBuilder.createQuery(Client.class);
+        Root<Client> root = criteriaQuery.from(Client.class);
+        criteriaQuery.select(root);
+
+        Query query = session.createQuery(criteriaQuery);
+        List<Client> listClient = query.getResultList();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return listClient;
     }
+
 
     @Override
     public Client getById(int id) throws SQLException {
-        String sql = "SELECT * FROM clients WHERE id=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setInt(1, id);
-        preparedStatement.execute();
-        ResultSet resultSet = preparedStatement.getResultSet();
-        resultSet.next();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
 
-        return new ClientMapper().mapRow(resultSet, id);
+        Client searchedClient = session.get(Client.class, id);
+
+        session.getTransaction().commit();
+        session.close();
+
+        return searchedClient;
     }
+
 
     @Override
-    public void save(Client client) throws SQLException {
-        String sql = "INSERT INTO clients(id, name, cash) VALUES(?,?,?);";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setInt(1, client.getId());
-        preparedStatement.setString(2, client.getName());
-        preparedStatement.setFloat(3, client.getCash());
-        preparedStatement.execute();
+    public void save(Client newClient) throws SQLException {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        session.save(newClient);
+
+        session.getTransaction().commit();
+        session.close();
     }
+
 
     @Override
     public void delete(int id) throws SQLException {
-        String sql = "DELETE FROM clients WHERE id=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setInt(1, id);
-        preparedStatement.execute();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaDelete<Client> criteriaDelete = criteriaBuilder.createCriteriaDelete(Client.class);
+        Root<Client> root = criteriaDelete.from(Client.class);
+        ParameterExpression<Integer> idParameter = criteriaBuilder.parameter(Integer.class, "id");
+        criteriaDelete.where(
+                criteriaBuilder.equal(root.get("id"), idParameter)
+        );
+
+        Query query = session.createQuery(criteriaDelete);
+        query.setParameter(idParameter, id);
+        query.executeUpdate();
+
+        session.getTransaction().commit();
+        session.close();
+
     }
+
 
     @Override
     public void update(Client client) throws SQLException {
-        String sql = "UPDATE clients SET name=?, cash=? WHERE id=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, client.getName());
-        preparedStatement.setFloat(2, client.getCash());
-        preparedStatement.setInt(3, client.getId());
-        preparedStatement.execute();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        session.update(client);
+
+        session.getTransaction().commit();
+        session.close();
     }
 
 }

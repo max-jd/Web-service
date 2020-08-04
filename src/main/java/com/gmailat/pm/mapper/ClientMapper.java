@@ -12,17 +12,17 @@ public class ClientMapper implements RowMapper<Client> {
 
     public Client mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         Client client = new Client(
-                    resultSet.getInt(1),
-                    resultSet.getString(2),
-                    resultSet.getFloat(3)
-            );
+                resultSet.getInt(1),
+                resultSet.getString(2),
+                resultSet.getFloat(3)
+        );
         return client;
     }
 
     public List<Client> mapToListClient(ResultSet resultSet) throws SQLException {
         List<Client> listOfClients = new ArrayList<Client>();
 
-        while(resultSet.next()) {
+        while (resultSet.next()) {
             int id = resultSet.getInt(1);
             String name = resultSet.getString(2);
             float cash = resultSet.getFloat(3);

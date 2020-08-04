@@ -1,29 +1,21 @@
 package com.gmailat.pm.entity;
 
+import lombok.*;
+
+import javax.persistence.*;
+
+@Entity
+@Setter
+@Getter
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "discounts")
 public class Discount {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int percent;
-
-    public Discount(int id, int percent) {
-        this.id = id;
-        this.percent = percent;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public int getPercent() {
-        return percent;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setPercent(int percent) {
-        this.percent = percent;
-    }
 
 }

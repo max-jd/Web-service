@@ -22,7 +22,6 @@ public class ClientController {
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping(value = "/create_user")
     public String addUser(@RequestBody String strClient) throws IOException, SQLException {
-
         Client newClient = (Client) (new JSONDeserializer().deserialize(strClient, Client.class));
         clientService.save(newClient);
 
@@ -35,7 +34,7 @@ public class ClientController {
     @PostMapping(value = "/add_money/{id}/{name}/{addAmount}")
     public String addMoney(@PathVariable("id") int id, @PathVariable("name") String name, @PathVariable("addAmount") float addAmount) throws SQLException {
         Client searchedClient = clientService.getById(id);
-        if( !searchedClient.getName().equals(name) ) {
+        if (!searchedClient.getName().equals(name)) {
             throw new NotFoundException();
         }
         searchedClient.setCash(searchedClient.getCash() + addAmount);
