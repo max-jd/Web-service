@@ -49,7 +49,7 @@ public class PayController {
             }
             while (listIterator.hasPrevious()) {
                 Product productRegularPrice = listIterator.previous();
-                productRegularPrice.setDiscount(0);
+                productRegularPrice.getDiscount().setPercent(0);
             }
         }
 

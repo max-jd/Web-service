@@ -5,24 +5,25 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class ProductMapper implements RowMapper<Product> {
 
     public Product mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-        Product product = new Product(
+     /*   Product product = new Product(
                 resultSet.getInt(1),
                 resultSet.getString(2),
                 resultSet.getString(3),
                 resultSet.getFloat(4),
                 resultSet.getInt(5)
         );
-        return product;
+        return product;*/
+        throw new UnsupportedOperationException(getClass() + "Not supported operation");
     }
 
     public List<Product> mapToListProduct(ResultSet resultSet) throws SQLException {
-        List<Product> listOfProducts = new ArrayList<Product>();
+/*        List<Product> listOfProducts = new ArrayList<Product>();
 
         while (resultSet.next()) {
             int id = resultSet.getInt(1);
@@ -34,7 +35,8 @@ public class ProductMapper implements RowMapper<Product> {
             Product product = new Product(id, name, category, price, discount);
             listOfProducts.add(product);
         }
-        return listOfProducts;
+        return listOfProducts;*/
+        throw new UnsupportedOperationException(getClass() + "Not supported operation");
     }
 
 }

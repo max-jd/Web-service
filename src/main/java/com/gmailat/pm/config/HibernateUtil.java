@@ -28,8 +28,11 @@ public class HibernateUtil {
                 settings.put(Environment.USER, "root");
                 settings.put(Environment.PASS, "4504913");
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
-                //settings.put(Environment.SHOW_SQL, "true");
+                settings.put(Environment.SHOW_SQL, "true");
+                settings.put(Environment.FORMAT_SQL, "true");
                 settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
+                settings.put(Environment.USE_SQL_COMMENTS, "true");
+                settings.put("hibernate.connection.characterEncoding", "utf8");
                 // settings.put(Environment.HBM2DDL_AUTO, "create-drop");
                 configuration.setProperties(settings);
                 configuration.addAnnotatedClass(Client.class);
