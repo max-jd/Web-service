@@ -1,6 +1,6 @@
 package com.gmailat.pm.controller;
 
-import com.gmailat.pm.Exception.NotFoundException;
+import com.gmailat.pm.exception.NotFoundException;
 import com.gmailat.pm.entity.Client;
 import com.gmailat.pm.service.ClientService;
 import flexjson.JSONDeserializer;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
 public class ClientController {
 
     @Autowired
-    ClientService clientService;
+    private ClientService clientService;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping(value = "/create_user")

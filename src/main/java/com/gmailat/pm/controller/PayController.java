@@ -1,6 +1,6 @@
 package com.gmailat.pm.controller;
 
-import com.gmailat.pm.Exception.NotEnoughMoneyException;
+import com.gmailat.pm.exception.NotEnoughMoneyException;
 import com.gmailat.pm.entity.Client;
 import com.gmailat.pm.entity.Product;
 import com.gmailat.pm.service.ClientService;

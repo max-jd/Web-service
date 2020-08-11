@@ -1,6 +1,7 @@
 package com.gmailat.pm.dao;
 
 import com.gmailat.pm.entity.Discount;
+import com.gmailat.pm.entity.Discount_;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +75,7 @@ public class DiscountDaoImpl implements DiscountDao {
         CriteriaDelete<Discount> criteriaDelete = criteriaBuilder.createCriteriaDelete(Discount.class);
         Root<Discount> root = criteriaDelete.from(Discount.class);
         ParameterExpression<Integer> idParameter = criteriaBuilder.parameter(Integer.class, "id");
-        criteriaDelete.where(criteriaBuilder.equal(root.get("id"), idParameter));
+        criteriaDelete.where(criteriaBuilder.equal(root.get(Discount_.id), idParameter));
 
         Query query = session.createQuery(criteriaDelete);
         query.setParameter(idParameter, id);

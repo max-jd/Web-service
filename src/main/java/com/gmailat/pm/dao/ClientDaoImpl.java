@@ -1,6 +1,7 @@
 package com.gmailat.pm.dao;
 
 import com.gmailat.pm.entity.Client;
+import com.gmailat.pm.entity.Client_;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -75,9 +76,8 @@ public class ClientDaoImpl implements ClientDao {
         Root<Client> root = criteriaDelete.from(Client.class);
         ParameterExpression<Integer> idParameter = criteriaBuilder.parameter(Integer.class, "id");
         criteriaDelete.where(
-                criteriaBuilder.equal(root.get("id"), idParameter)
+                criteriaBuilder.equal(root.get(Client_.id), idParameter)
         );
-
         Query query = session.createQuery(criteriaDelete);
         query.setParameter(idParameter, id);
         query.executeUpdate();

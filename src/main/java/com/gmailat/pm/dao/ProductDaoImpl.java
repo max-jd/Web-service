@@ -1,6 +1,7 @@
 package com.gmailat.pm.dao;
 
 import com.gmailat.pm.entity.Product;
+import com.gmailat.pm.entity.Product_;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,7 @@ public class ProductDaoImpl implements ProductDao {
         CriteriaDelete<Product> criteriaDelete = criteriaBuilder.createCriteriaDelete(Product.class);
         Root<Product> root = criteriaDelete.from(Product.class);
         ParameterExpression<Integer> idParameter = criteriaBuilder.parameter(Integer.class, "id");
+        criteriaDelete.where(criteriaBuilder.equal(root.get(Product_.id), idParameter));
 
         Query query = session.createQuery(criteriaDelete);
         query.setParameter(idParameter, id);
